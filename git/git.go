@@ -45,25 +45,25 @@ func Push(directory string) error {
 	return nil
 }
 
-func Jenkins(username string,password string,jenurl string,job string,key string) (string,error) {
+func Jenkins(username string,password string,jenurl string,job string,key string) error {
 	client := http.Client{}
 
 	URL := jenurl+ "/job/"+ job + "/build?token=" + key
 	req, err := http.NewRequest(http.MethodGet, URL, http.NoBody)
 	if err != nil {
-		return "",err
+		return err
 	}
 
 	req.SetBasicAuth(username, password)
 
 	resp,err := client.Do(req)
 	if err != nil {
-		return "",err
+		return err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return "", err
+		return err
 	}
-	return resp.Status,nil
+	return nil
 }
