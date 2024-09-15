@@ -33,7 +33,7 @@ func Commit(name string,email string,directory string,commit string) error {
 	return nil
 }
 
-func Push(directory) error {
+func Push(directory string) error {
 	r,err := git.PlainOpen(directory)
 	if err != nil {
 		return err
@@ -56,7 +56,7 @@ func Jenkins(username string,password string,jenurl string,job string,key string
 
 	req.SetBasicAuth(username, password)
 
-	resp,err = client.Do(req)
+	resp,err := client.Do(req)
 	if err != nil {
 		return "",err
 	}
