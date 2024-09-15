@@ -65,7 +65,7 @@ func Jenkins(username string,password string,jenurl string,job string,key string
 	defer resp.Body.Close()
 
 	if resp.StatusCode == http.StatusOK || resp.StatusCode == http.StatusCreated {
-		fmt.Println("Request successfully reached Jenkins and initiated the job.")
+		return nil
 	} else {
 		switch resp.StatusCode {
 		case http.StatusUnauthorized:
@@ -78,13 +78,4 @@ func Jenkins(username string,password string,jenurl string,job string,key string
 			return fmt.Errorf("unexpected status code: %d", resp.StatusCode)
 		}
 	}
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return fmt.Errorf("failed to read response body: %w", err)
-	}
-
-	fmt.Printf("Response Body: %s\n", body)
-
-	return nil
 }
