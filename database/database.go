@@ -33,8 +33,7 @@ func GetVersion() (string,error) {
 }
 
 func CheckTable(table string) (bool,error) {
-	query := fmt.Sprintf("SHOW TABLES LIKE '%s'", table)
-	res, err := DB.Query(query)
+	res, err := DB.Query("SHOW TABLES LIKE '%s'",table)
 	if err != nil {
 		return false,err
 	}
