@@ -62,8 +62,27 @@ func Jenkins(username string,password string,jenurl string,job string,key string
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		return err
+	if resp.StatusCode == http.StatusOK || resp.StatusCode == http.StatusCreated {
+		fmt.Println("Request successfully reached Jenkins and initiated the job.")
+	} else {
+		switch resp.StatusCode {
+		case http.StatusUnauthorized:
+			return fmt.Errorf("authentication failed: invalid credentials")
+		case http.StatusForbidden:
+			return fmt.Errorf("access denied: you don't have permission to trigger this job")
+		case http.StatusNotFound:
+			return fmt.Errorf("job not found: check the job name and URL")
+		default:
+			return fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+		}
 	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return fmt.Errorf("failed to read response body: %w", err)
+	}
+
+	fmt.Printf("Response Body: %s\n", body)
+
 	return nil
 }
