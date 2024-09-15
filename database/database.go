@@ -1,8 +1,6 @@
 package database 
 
 import (
-	"os"
-	"strings"
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -35,15 +33,15 @@ func GetVersion() (string,error) {
 }
 
 func CheckTable(table string) (bool,error) {
-	table, err := DB.Query("SHOW TABLES LIKE '%s'",table)
+	res, err := DB.Query("SHOW TABLES LIKE ?",table)
 	if err != nil {
 		return false,err
 	}
 	defer res.Close()
 
-	var table string
+	var foundtable string
 	if res.Next() {
-		if err := res.Scan(&table); err != nil {
+		if err := res.Scan(&foundtable); err != nil {
 			return false,err
 		}
 		return true, nil //found

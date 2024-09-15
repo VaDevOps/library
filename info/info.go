@@ -47,5 +47,5 @@ func Memory() (string,error) {
 	}
 
 	totalMemory := uint64(info.Totalram) * uint64(info.Unit)
-	return strconv.FormatUint(totalMemory/1024/1024,10)i,nil
+	return strconv.FormatUint(totalMemory/1024/1024,10),nil
 }
