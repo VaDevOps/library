@@ -16,6 +16,3 @@ func TestMemory(t *testing.T) {
 	}
 }
 
-func TestCPU() {
-
-}
