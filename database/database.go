@@ -28,18 +28,18 @@ func GetVersion(db *sql.DB) (string,error) {
 	return version,nil
 }
 
-func CheckTable(db *sql.DB,table string) (bool,error) {
-	var scanned string
+func CheckTable(db *sql.DB,table string) bool {
 	query := fmt.Sprintf("SHOW TABLES LIKE '%s'",table)
-	err := db.QueryRow(query).Scan(&scanned)
+	rows,err := db.Query(query)
 	if err != nil {
-		return false,nil
+		return false
 	}
-	return true, nil
+	defer rows.Close()
+	return rows.Next()
 }
 
 func CreateTable(db *sql.DB,table string) error {
-	_,err := db.Query("CREATE TABLE " + table + "(test INT)")
+	_,err := db.Exec("CREATE TABLE " + table + "(test INT)")
 	if err != nil {
 		return err
 	}
@@ -47,7 +47,7 @@ func CreateTable(db *sql.DB,table string) error {
 }
 
 func DeleteTable(db *sql.DB,table string) error {
-	_,err := db.Query("DROP TABLE " + table)
+	_,err := db.Exec("DROP TABLE " + table)
 	if err != nil {
 		return err
 	}
