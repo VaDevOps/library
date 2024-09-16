@@ -29,21 +29,11 @@ func GetVersion(db *sql.DB) (string,error) {
 }
 
 func CheckTable(db *sql.DB,table string) (bool,error) {
-	query := fmt.Sprintf("SHOW TABLES LIKE '%s'", table)
-	res, err := db.Query(query)
+	res, err := db.QueryRow("SHOW TABLES LIKE ?",table)
 	if err != nil {
 		return false,err
 	}
-	defer res.Close()
-
-	var foundtable string
-	if res.Next() {
-		if err := res.Scan(&foundtable); err != nil {
-			return false,err
-		}
-		return true, nil //found
-	}
-	return false, nil // not found
+	return true, nil
 }
 
 func CreateTable(db *sql.DB,table string) error {

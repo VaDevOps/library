@@ -40,7 +40,9 @@ func TestCheckTable(t *testing.T) {
 	if err != nil {
 		t.Fatalf("expected no error, but got %v", err)
 	}
-	defer db.Close()
+	:defer db.Close()
+
+	
 }
 
 func TestCreateTable(t *testing.T) {
