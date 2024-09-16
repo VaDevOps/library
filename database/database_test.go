@@ -60,7 +60,7 @@ func TestCreateTable(t *testing.T) {
 
 	err = CreateTable(db, table)
 	if err != nil {
-		t.Errorf(err)
+		t.Errorf("Error %s",err)
 	}
 	if err := mock.ExpectationsWereMet(); err != nil {
 		t.Errorf("there were unfulfilled expectations: %v", err)
@@ -79,7 +79,7 @@ func TestDeleteTable(t *testing.T) {
 
 	err = DeleteTable(db, table)
 	if err != nil {
-		t.Errorf(err)
+		t.Errorf("Error: %s",err)
 	}
 	if err := mock.ExpectationsWereMet(); err != nil {
 		t.Errorf("there were unfulfilled expectations: %v", err)
