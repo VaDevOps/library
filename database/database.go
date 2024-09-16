@@ -6,34 +6,28 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-var (
-	DB *sql.DB
-	err error
-	version string
-)
-
-func DatabaseConnect(connection string) error {
-	DB, err = sql.Open("mysql", connection)
+func DatabaseConnect(connection string) (*sql.DB,error) {
+	db, err := sql.Open("mysql", connection)
 	if err != nil {
-		return err
+		return nil,err
 	}
 
-	err = DB.Ping()
+	err = db.Ping()
 	if err != nil {
-		return err
+		return nil,err
 	}
-	return nil
+	return db,nil
 }
 
-func GetVersion() (string,error) {
-	err = DB.QueryRow("SELECT VERSION()").Scan(&version)
+func GetVersion(db *sql.DB) (string,error) {
+	err := db.QueryRow("SELECT VERSION()").Scan(&version)
 	if err != nil {
 		return "",err
 	}
 	return version,nil
 }
 
-func CheckTable(table string) (bool,error) {
+func CheckTable(db *sql.DB,table string) (bool,error) {
 	query := fmt.Sprintf("SHOW TABLES LIKE '%s'", table)
 	res, err := DB.Query(query)
 	if err != nil {
@@ -51,7 +45,7 @@ func CheckTable(table string) (bool,error) {
 	return false, nil // not found
 }
 
-func CreateTable(table string) error {
+func CreateTable(db *sql.DB,table string) error {
 	_,err := DB.Query("CREATE TABLE " + table + "(test INT)")
 	if err != nil {
 		return err
@@ -59,7 +53,7 @@ func CreateTable(table string) error {
 	return nil
 }
 
-func DeleteTable(table string) error {
+func DeleteTable(db *sql.DB,table string) error {
 	_,err := DB.Query("DROP TABLE " + table)
 	if err != nil {
 		return err

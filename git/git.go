@@ -3,48 +3,7 @@ package git
 import (
 	"fmt"
 	"net/http"
-	"github.com/go-git/go-git/v5"
-	"github.com/go-git/go-git/v5/plumbing/object"
-	"time"
 )
-
-func Commit(name string,email string,directory string,commit string) error {
-	r,err := git.PlainOpen(directory)
-	if err != nil {
-		return err
-	}
-	w,err := r.Worktree()
-	if err != nil {
-		return err
-	}
-	_,err = w.Add(directory)
-	if err != nil {
-		return nil
-	}
-	_,err = w.Commit(commit, &git.CommitOptions{
-		Author: &object.Signature{
-			Name:  name,
-			Email: email,
-			When:  time.Now(),
-		},
-	})
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func Push(directory string) error {
-	r,err := git.PlainOpen(directory)
-	if err != nil {
-		return err
-	}
-	err = r.Push(&git.PushOptions{})
-	if err != nil {
-		return err
-	}
-	return nil
-}
 
 func Jenkins(username string,password string,jenurl string,job string,key string) error {
 	client := http.Client{}
