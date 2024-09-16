@@ -20,6 +20,7 @@ func DatabaseConnect(connection string) (*sql.DB,error) {
 }
 
 func GetVersion(db *sql.DB) (string,error) {
+	var version string
 	err := db.QueryRow("SELECT VERSION()").Scan(&version)
 	if err != nil {
 		return "",err
@@ -29,7 +30,7 @@ func GetVersion(db *sql.DB) (string,error) {
 
 func CheckTable(db *sql.DB,table string) (bool,error) {
 	query := fmt.Sprintf("SHOW TABLES LIKE '%s'", table)
-	res, err := DB.Query(query)
+	res, err := db.Query(query)
 	if err != nil {
 		return false,err
 	}
@@ -46,7 +47,7 @@ func CheckTable(db *sql.DB,table string) (bool,error) {
 }
 
 func CreateTable(db *sql.DB,table string) error {
-	_,err := DB.Query("CREATE TABLE " + table + "(test INT)")
+	_,err := db.Query("CREATE TABLE " + table + "(test INT)")
 	if err != nil {
 		return err
 	}
@@ -54,7 +55,7 @@ func CreateTable(db *sql.DB,table string) error {
 }
 
 func DeleteTable(db *sql.DB,table string) error {
-	_,err := DB.Query("DROP TABLE " + table)
+	_,err := db.Query("DROP TABLE " + table)
 	if err != nil {
 		return err
 	}
