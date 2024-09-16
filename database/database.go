@@ -28,7 +28,8 @@ func GetVersion(db *sql.DB) (string,error) {
 }
 
 func CheckTable(db *sql.DB,table string) (bool,error) {
-	err := db.QueryRow("SHOW TABLES LIKE ?",table)
+	var scanned string
+	err := db.QueryRow("SHOW TABLES LIKE ?",table).Scan(&scanned)
 	if err != nil {
 		return false,err
 	}
