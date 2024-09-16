@@ -33,7 +33,7 @@ func CheckTable(db *sql.DB,table string) (bool,error) {
 	query := fmt.Sprintf("SHOW TABLES LIKE '%s'",table)
 	err := db.QueryRow(query).Scan(&scanned)
 	if err != nil {
-		return false,err
+		return false,nil
 	}
 	return true, nil
 }
