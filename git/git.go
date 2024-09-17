@@ -1,6 +1,7 @@
 package git
 
 import (
+	"io"
 	"fmt"
 	"net/http"
 )
@@ -38,7 +39,7 @@ func Jenkins(username string,password string,jenurl string,job string,key string
 	}
 }
 
-func JenkinsLog(username string,password string,jenurl string,job string) error {
+func JenkinsLog(username string,password string,jenurl string,job string) string {
 	client := http.Client{}
 
 	URL := jenurl+ "/job/"+ job + "/lastBuild/consoleText"
@@ -56,7 +57,11 @@ func JenkinsLog(username string,password string,jenurl string,job string) error 
 	defer resp.Body.Close()
 
 	if resp.StatusCode == http.StatusOK || resp.StatusCode == http.StatusCreated {
-		return nil
+		body,err := io.ReadAll(resp.Body)
+		if err != nil {
+			return "error"
+		}
+		return body
 	} else {
 		switch resp.StatusCode {
 		case http.StatusUnauthorized:
