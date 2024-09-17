@@ -2,6 +2,7 @@ package database
 
 import (
 	"fmt"
+	"errors"
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -28,14 +29,19 @@ func GetVersion(db *sql.DB) (string,error) {
 	return version,nil
 }
 
-func CheckTable(db *sql.DB,table string) bool {
+func CheckTable(db *sql.DB,table string) error {
 	query := fmt.Sprintf("SHOW TABLES LIKE '%s'",table)
 	rows,err := db.Query(query)
 	if err != nil {
-		return false
+		return err
 	}
 	defer rows.Close()
-	return rows.Next()
+
+	if rows.Next() {
+		return nil
+	}
+
+	return errors.New("table not found")
 }
 
 func CreateTable(db *sql.DB,table string) error {
