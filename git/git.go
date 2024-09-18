@@ -39,39 +39,39 @@ func Jenkins(username string,password string,jenurl string,job string,key string
 	}
 }
 
-func JenkinsLog(username string,password string,jenurl string,job string) string {
+func JenkinsLog(username string,password string,jenurl string,job string) (string,error) {
 	client := http.Client{}
 
 	URL := jenurl+ "/job/"+ job + "/lastBuild/consoleText"
 	req, err := http.NewRequest(http.MethodGet, URL, http.NoBody)
 	if err != nil {
-		return err
+		return "",err
 	}
 
 	req.SetBasicAuth(username, password)
 
 	resp,err := client.Do(req)
 	if err != nil {
-		return err
+		return "",err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode == http.StatusOK || resp.StatusCode == http.StatusCreated {
 		body,err := io.ReadAll(resp.Body)
 		if err != nil {
-			return "error"
+			return "",err
 		}
-		return body
+		return string(body),nil
 	} else {
 		switch resp.StatusCode {
 		case http.StatusUnauthorized:
-			return fmt.Errorf("authentication failed: invalid credentials")
+			return "",fmt.Errorf("authentication failed: invalid credentials")
 		case http.StatusForbidden:
-			return fmt.Errorf("access denied: you don't have permission to trigger this job")
+			return "",fmt.Errorf("access denied: you don't have permission to trigger this job")
 		case http.StatusNotFound:
-			return fmt.Errorf("job not found: check the job name and URL")
+			return "",fmt.Errorf("job not found: check the job name and URL")
 		default:
-			return fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+			return "",fmt.Errorf("unexpected status code: %d", resp.StatusCode)
 		}
 	}
 }
