@@ -46,14 +46,24 @@ func TestJenkins(t *testing.T) {
         })
 }
 
-//func TestJenkinsLog(t *testing.T){
-//	t.Run("Success",func (t *testing.T)){
-//		
-//	}
-//	t.Run("Unauthorized",func (t *testing.T)){
-//		
-//	}
-//	t.Run("Job_Not_Found",func(t *testing.T)){
-//		
-//	}
-//}
+func TestJenkinsLog(t *testing.T){
+	t.Run("Success",func (t *testing.T){
+                server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+                        if r.URL.Path == "/job/test-job/build" && r.Method == http.MethodGet {
+                                w.WriteHeader(http.StatusOK)
+                        }
+                }))
+                defer server.Close()
+
+                log,err := JenkinsLog("user", "pass", server.URL, "test-job", "secret-token")
+                if err != nil {
+                        t.Errorf("Expected no error, but got %v", err)
+                }
+	})
+	t.Run("Unauthorized",func (t *testing.T){
+		
+	})
+	t.Run("Job_Not_Found",func(t *testing.T){
+		
+	})
+}
