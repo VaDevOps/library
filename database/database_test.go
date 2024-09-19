@@ -67,8 +67,6 @@ func TestDatabaseFunctions(t *testing.T) {
 			t.Errorf("expected error, but got nil")
 		} else if err.Error() != expectedErr {
 			t.Errorf("expected error: %s, but got: %s", expectedErr, err.Error())
-		} else {
-			t.Logf("received expected error: %s", err)
 		}
 
 		if err := mock.ExpectationsWereMet(); err != nil {
@@ -112,8 +110,6 @@ func TestDatabaseFunctions(t *testing.T) {
 			t.Errorf("expected error, but got nil")
 		} else if err.Error() != expectedErr {
 			t.Errorf("expected error: %s, but got: %s", expectedErr, err.Error())
-		} else {
-			t.Logf("received expected error: %s", err)
 		}
 
 		if err := mock.ExpectationsWereMet(); err != nil {
