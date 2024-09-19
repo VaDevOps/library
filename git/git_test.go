@@ -51,7 +51,10 @@ func TestJenkinsLog(t *testing.T){
 		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			if r.URL.Path == "/job/test-job/lastBuild/consoleText" && r.Method == http.MethodGet {
 				w.WriteHeader(http.StatusOK)
-				w.Write([]byte("Hello"))
+				_,err := w.Write([]byte("Hello"))
+				if err != nil {
+					t.Errorf("Error writing response: %v", err)
+				}
 			}
 		}))
 		defer server.Close()
