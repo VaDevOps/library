@@ -56,9 +56,13 @@ func TestJenkinsLog(t *testing.T){
 		}))
 		defer server.Close()
 
-		_,err := JenkinsLog("user", "pass", server.URL, "test-job")
+		log,err := JenkinsLog("user", "pass", server.URL, "test-job")
 		if err != nil {
 			t.Errorf("Expected no error, but got %v", err)
+		}
+
+		if log != "Hello" {
+			t.Errorf("Body is: %s",log)
 		}
 	})
 	t.Run("Unauthorized",func (t *testing.T){
