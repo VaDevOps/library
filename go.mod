@@ -1,4 +1,4 @@
-module gitlab.com/vangdevops/mylibrary
+module github.com/VaDevOps/library
 
 go 1.23.0
 
