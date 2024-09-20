@@ -1,4 +1,4 @@
-module github.com/VaDevOps/library
+module github.com/vangdevops/library
 
 go 1.23.0
 
