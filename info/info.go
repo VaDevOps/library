@@ -39,13 +39,13 @@ func CPU() string{
 	return strconv.Itoa(runtime.NumCPU())
 }
 
-func Memory() (string,error) {
+func Memory(sysinfoFunc func(*syscall.Sysinfo_t) error) (string, error) {
 	var info syscall.Sysinfo_t
-	err := syscall.Sysinfo(&info)
+	err := sysinfoFunc(&info)
 	if err != nil {
-		return "",err
+		return "", err
 	}
 
 	totalMemory := uint64(info.Totalram) * uint64(info.Unit)
-	return strconv.FormatUint(totalMemory/1024/1024,10),nil
+	return strconv.FormatUint(totalMemory/1024/1024, 10), nil
 }
