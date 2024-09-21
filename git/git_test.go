@@ -59,7 +59,7 @@ func TestJenkinsLog(t *testing.T){
 		}))
 		defer server.Close()
 
-		log,err := JenkinsLog("user", "pass", server.URL, "test-job")
+		log,err := JenkinsLog("user", "pass", server.URL, "test-job",0)
 		if err != nil {
 			t.Errorf("Expected no error, but got %v", err)
 		}
@@ -74,7 +74,7 @@ func TestJenkinsLog(t *testing.T){
 		}))
 		defer server.Close()
 
-		_,err := JenkinsLog("user", "pass", server.URL, "test-job")
+		_,err := JenkinsLog("user", "pass", server.URL, "test-job",0)
 		if err == nil || err.Error() != "authentication failed: invalid credentials" {
 			t.Errorf("Expected authentication failed error, but got %v", err)
 		}
@@ -85,7 +85,7 @@ func TestJenkinsLog(t *testing.T){
 		}))
 		defer server.Close()
 
-		_,err := JenkinsLog("user", "pass", server.URL, "non-existent-job")
+		_,err := JenkinsLog("user", "pass", server.URL, "non-existent-job",0)
 		if err == nil || err.Error() != "job not found: check the job name and URL" {
 			t.Errorf("Expected job not found error, but got %v", err)
 		}

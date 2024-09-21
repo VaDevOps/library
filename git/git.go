@@ -39,7 +39,7 @@ func Jenkins(username string,password string,jenurl string,job string,key string
 	}
 }
 
-func JenkinsLog(username string,password string,jenurl string,job string) (string,error) {
+func JenkinsLog(username string, password string, jenurl string, job string, lastPosition int64) (string,error) {
 	client := http.Client{}
 
 	URL := jenurl+ "/job/"+ job + "/lastBuild/consoleText"
@@ -49,6 +49,11 @@ func JenkinsLog(username string,password string,jenurl string,job string) (strin
 	}
 
 	req.SetBasicAuth(username, password)
+
+	if lastPosition > 0 {
+		rangeHeader := fmt.Sprintf("bytes=%d-", lastPosition)
+		req.Header.Add("Range", rangeHeader)
+	}
 
 	resp,err := client.Do(req)
 	if err != nil {
