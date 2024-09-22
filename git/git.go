@@ -61,7 +61,6 @@ func JenkinsLog(username string, password string, jenurl string, job string) (st
 		if err != nil {
 			return "",err
 		}
-
 		return string(body),nil
 	} else {
 		switch resp.StatusCode {
